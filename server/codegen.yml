@@ -1,0 +1,12 @@
+overwrite: true
+schema: 'http://localhost:4003/graphql'
+config:
+  typesPrefix: I
+generates:
+  src/__generated__/graphql.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-resolvers'
+    config:
+      mappers:
+        User: ../db_models/init-models#users

@@ -1,0 +1,14 @@
+extend type Query {
+    users: [User]
+    greeting: String!
+}
+
+type User {
+    id: Int!
+    firstName: String!
+    lastName: String!
+    phoneNumber: Int
+    role: Int!
+    createdAt: Date
+    updatedAt: Date
+}

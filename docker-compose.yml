@@ -1,0 +1,52 @@
+version: "3.7"
+
+services:
+
+  recruitment-mysql-db:
+    image: mysql:latest
+    container_name: recruitment-mysql-db
+    ports:
+      - "3307:3306"
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_NAME}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    command:
+      - --character-set-server=utf8mb4
+    volumes:
+      - mysql-volume:/var/lib/mysql
+
+  redis:
+    image: redis:6.0.5
+    container_name: redis
+    ports:
+      - "6378:6379"
+    restart: always
+    entrypoint:
+      - "redis-server"
+      - "--notify-keyspace-events AKE"
+
+  server:
+    build:
+      context: ./server
+      target: development
+    container_name: server
+    ports:
+      - "4003:4003"
+    restart: always
+    depends_on:
+      - redis
+      - recruitment-mysql-db
+    volumes:
+      - ./server/src:/app/src
+    env_file:
+      - .env
+    environment:
+      - SYNC_DATA
+
+volumes:
+  mysql-volume:

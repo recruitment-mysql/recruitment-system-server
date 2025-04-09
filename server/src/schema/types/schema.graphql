@@ -1,0 +1,44 @@
+# This file was generated. Do not edit manually.
+
+schema {
+    query: Query
+}
+
+type PageInfo {
+    endCursor: Cursor
+    hasNextPage: Boolean!
+}
+
+type Query {
+    greeting: String!
+    users: [User]
+}
+
+type User {
+    createdAt: Date
+    firstName: String!
+    id: Int!
+    lastName: String!
+    phoneNumber: Int
+    role: Int!
+    updatedAt: Date
+}
+
+enum SuccessResponse {
+    success
+}
+
+scalar Cursor
+
+scalar Date
+
+scalar JSON
+
+scalar Upload
+
+input PaginationInput {
+    after: Cursor
+    before: Cursor
+    first: Int
+    last: Int
+}
