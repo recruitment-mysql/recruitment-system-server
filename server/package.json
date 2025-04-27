@@ -1,5 +1,5 @@
 {
-  "name": "lap-sys-server",
+  "name": "recruitment-sys-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,10 +7,11 @@
     "test": "jest",
     "build:live": "nodemon src/server.ts --ignore 'test/*'",
     "start": "npm run build:live",
-    "models-gen": "sequelize-auto -h 127.0.0.1 -d recruitment-mysql -u admin -x recruitment -p 3307 --dialect mysql -o \"./src/db_models\" -l ts && npm run lint:fix-model && npm run prettier:models",
+    "models-gen": "sequelize-auto -h 127.0.0.1 -d recruitment-mysql -u admin -x recruitment -p 3307 --dialect mysql -o \"./src/db_models/sql\" -l ts && npm run lint:fix-model && npm run prettier:models",
     "codegen": "graphql-codegen --config codegen.yml && npm run prettier:base -- --write \"src/__generated__/*.ts\"",
-    "prettier:models": "npm run prettier:base -- --write  \"src/db_models/*.ts\"",
-    "lint:fix-model": "eslint --fix --ext .ts ./src/db_models"
+    "prettier:models": "npm run prettier:base -- --write  \"src/db_models/sql/*.ts\"",
+    "prettier:base": "prettier --parser typescript --single-quote --tab-width 4",
+    "lint:fix-model": "eslint --fix --ext .ts ./src/db_models/sql ./src/db_models/nosql"
   },
   "keywords": [],
   "author": "",
@@ -85,6 +86,7 @@
     "graphql-upload": "^15.0.2",
     "graphql-ws": "^5.15.0",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.2",
     "mysql2": "^3.9.2",
     "save-dev": "^0.0.1-security",
     "sequelize": "^6.37.1",

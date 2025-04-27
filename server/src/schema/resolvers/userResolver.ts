@@ -3,11 +3,23 @@
 /* eslint-disable linebreak-style */
 
 import bcrypt from 'bcrypt';
-import { Transaction } from 'sequelize';
-import { db } from '../../db_loaders/mysql';
+import {Transaction} from 'sequelize';
+import fs from 'fs';
+import path from 'path';
+import {db, sequelize} from '../../db_loaders/mysql';
 import { checkAuthentication } from '../../lib/ultis/permision';
 import { IResolvers, ISuccessResponse } from '../../__generated__/graphql';
-import { MySQLError } from '../../lib/classes/graphqlErrors';
+import {
+    AuthenticationError,
+    MySQLError,
+    UserAlreadyExistError,
+    UserNotFoundError
+} from '../../lib/classes/graphqlErrors';
+import {generateJWT} from '../../lib/ultis/jwt';
+import {DefaultHashValue, roleID} from '../../lib/enum';
+import {usersCreationAttributes} from '../../db_models/sql/users';
+import {iRoleToNumber} from '../../lib/enum_resolvers';
+
 
 const userResolver: IResolvers = {
     Query: {
@@ -18,6 +30,10 @@ const userResolver: IResolvers = {
                 throw new MySQLError(`Error: ${error.message}`);
             });
         },
+
+    },
+    Mutation :{
+
     },
 };
 export default userResolver;

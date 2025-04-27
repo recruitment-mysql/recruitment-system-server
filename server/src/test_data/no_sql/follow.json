@@ -1,0 +1,17 @@
+[
+  {
+    "candidate_id": "cand_001",
+    "employer_id": "emp_001",
+    "followed_at": "2025-04-26T00:00:00Z"
+  },
+  {
+    "candidate_id": "cand_002",
+    "employer_id": "emp_001",
+    "followed_at": "2025-04-25T00:00:00Z"
+  },
+  {
+    "candidate_id": "cand_001",
+    "employer_id": "emp_002",
+    "followed_at": "2025-04-20T00:00:00Z"
+  }
+]

@@ -1,7 +1,6 @@
 version: "3.7"
 
 services:
-
   recruitment-mysql-db:
     image: mysql:latest
     container_name: recruitment-mysql-db
@@ -19,16 +18,30 @@ services:
       - --character-set-server=utf8mb4
     volumes:
       - mysql-volume:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-  redis:
-    image: redis:6.0.5
-    container_name: redis
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
     ports:
-      - "6378:6379"
+      - "27017:27017"
     restart: always
-    entrypoint:
-      - "redis-server"
-      - "--notify-keyspace-events AKE"
+    env_file:
+      - .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    volumes:
+      - mongo-volume:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   server:
     build:
@@ -39,8 +52,10 @@ services:
       - "4003:4003"
     restart: always
     depends_on:
-      - redis
-      - recruitment-mysql-db
+      recruitment-mysql-db:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
     volumes:
       - ./server/src:/app/src
     env_file:
@@ -50,3 +65,4 @@ services:
 
 volumes:
   mysql-volume:
+  mongo-volume:

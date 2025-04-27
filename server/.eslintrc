@@ -1,0 +1,106 @@
+{
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true,
+    "jest": true
+  },
+  "extends": [
+    "airbnb-base",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "modules": true,
+      "classes": true,
+      "jsx": true
+    }
+  },
+  "plugins": ["@typescript-eslint"],
+
+  "rules": {
+    "indent": [
+      "off",
+      4,
+      {
+        "VariableDeclarator": {
+          "var": 2,
+          "let": 2,
+          "const": 3
+        }
+      }
+    ],
+    "linebreak-style": "off",
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"],
+    "array-bracket-newline": "warn",
+    "radix": "warn",
+    "camelcase": "off",
+    "no-unused-vars": "off",
+    "no-restricted-imports": "off",
+    "no-return-await": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "import/extensions": [
+      "error",
+      "never",
+      {
+        "svg": "always"
+      }
+    ],
+    "import/no-unresolved": [
+      "off",
+      {
+        "caseSensitive": false
+      }
+    ],
+    "no-use-before-define": "warn",
+    "no-shadow": [
+      "warn",
+      {
+        "builtinGlobals": false,
+        "hoist": "functions",
+        "allow": []
+      }
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 150,
+        "tabWidth": 4
+      }
+    ],
+    "no-console": "off",
+    "new-cap": "off",
+    "@typescript-eslint/ban-ts-ignore": "off",
+    "import/no-extraneous-dependencies": [
+      "off",
+      {
+        "devDependencies": false,
+        "optionalDependencies": false,
+        "peerDependencies": false
+      }
+    ],
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "max-classes-per-file": ["error", 100],
+    "prettier/prettier": [
+      "off",
+      {
+        "printWidth": 150,
+        "trailingComma": "es5",
+        "tabWidth": 4,
+        "semi": true,
+        "singleQuote": true,
+        "bracketSpacing": true,
+        "endOfLine": "auto"
+      }
+    ]
+  },
+  "globals": {
+    "arguments": true
+  }
+}

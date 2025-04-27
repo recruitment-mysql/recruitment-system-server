@@ -1,3 +1,0 @@
-[{"id":1, "userName":"admin", "passWord":"demo1234", "firstName":"Admin", "lastName":"1", "role":0, "phoneNumber":"0999999999", "createdAt":"2024-03-26", "updatedAt":"2024-03-26"},
- {"id":2, "userName":"contentManager", "passWord":"demo1234", "firstName":"ContenManager", "lastName":"2", "role":1, "phoneNumber":"0888888888", "createdAt":"2024-03-26", "updatedAt":"2024-03-26"},
- {"id":3, "userName":"member", "passWord":"demo1234", "firstName":"Member", "lastName":"3", "role":2, "phoneNumber":"0777777777", "createdAt":"2024-03-26", "updatedAt":"2024-03-26"}]

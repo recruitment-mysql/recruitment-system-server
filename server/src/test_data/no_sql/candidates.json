@@ -1,0 +1,44 @@
+[
+  {
+    "candidate_id": "cand_001",
+    "user_id": 1,
+    "cv_url": "https://drive.google.com/cand_001_cv.pdf",
+    "skills": [1, 2],
+    "degree_id": 1,
+    "experience": [
+      {
+        "company": "Tech Corp",
+        "role": "Software Engineer",
+        "years": 2,
+        "industry_id": 1
+      },
+      {
+        "company": "Data Solutions",
+        "role": "Junior Developer",
+        "years": 1,
+        "industry_id": 2
+      }
+    ],
+    "status": true,
+    "total_experience_years": 3,
+    "updated_at": "2025-04-26T00:00:00.000Z"
+  },
+  {
+    "candidate_id": "cand_002",
+    "user_id": 2,
+    "cv_url": "https://drive.google.com/cand_002_cv.pdf",
+    "skills": [3],
+    "degree_id": 2,
+    "experience": [
+      {
+        "company": "AI Innovations",
+        "role": "Data Scientist",
+        "years": 4,
+        "industry_id": 3
+      }
+    ],
+    "status": false,
+    "total_experience_years": 4,
+    "updated_at": "2025-04-26T00:00:00.000Z"
+  }
+]

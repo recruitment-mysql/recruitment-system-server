@@ -1,36 +1,32 @@
-// eslint-disable-next-line import/extensions,@typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line import/extensions
-// noinspection HttpUrlsUsage
 import { createServer } from 'http';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line import/extensions
-// import type { FileUpload } from "graphql-upload/processRequest.js";
-// import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import express from 'express';
 import { ApolloServer } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { useServer, Extra } from 'graphql-ws/lib/use/ws';
 import bodyParser from 'body-parser';
-import { Context, SubscribeMessage } from 'graphql-ws';
+import { Context } from 'graphql-ws';
 import * as dotenv from 'dotenv';
-import { ExecutionArgs } from 'graphql';
 import { WebSocketServer } from 'ws';
 import cors from 'cors';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-// import jwt from 'jsonwebtoken';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
+import { Sequelize } from 'sequelize';
+import mongoose from 'mongoose';
 import resolvers from './schema/resolvers';
 import typeDefs from './schema/types';
 import { syncDatabase } from './db_loaders/mysql';
+import { connectMongo, models as mongoModels, db } from './db_loaders/mongodb';
 import { app } from './config/appConfig';
 import { USER_JWT } from './lib/ultis/jwt';
-// import { queryExample } from './playground';
+import { queryExample } from './playground';
 
 dotenv.config();
+
+// Global instances
+let globalMysqlInstance: Sequelize;
+let globalMongodbInstance: typeof mongoose;
 
 export interface LapContext {
     isAuth: boolean;
@@ -38,106 +34,105 @@ export interface LapContext {
     error: any;
     req: express.Request;
     res: express.Response;
-    // pubsub: PubSubService;
+    mysql: Sequelize;
+    mongodb: typeof mongoose;
+    mongoModels: ReturnType<typeof db.initModels>;
 }
 
 interface ContextFunctionProps {
     req: express.Request;
     res: express.Response;
 }
+
 const authentication = async (
     authorization: string,
     req: express.Request,
     res: express.Response
-): Promise<LapContext & JwtPayload> => {
-    let token: string;
-    if (authorization.startsWith('Bearer ')) {
-        token = authorization.slice(7, authorization.length);
+): Promise<LapContext> => {
+    let token: string = authorization || '';
+    if (token.startsWith('Bearer ')) {
+        token = token.slice(7);
     }
-    const user: JwtPayload = new Promise((resolve, reject) => {
-        jwt.verify(token, app.secretSign, (err, decoded) => {
-            if (err) return reject(err);
-            return resolve(decoded);
+
+    const mysql = globalMysqlInstance;
+    const mongodb = globalMongodbInstance;
+    const mongoModelsInstance = mongoModels;
+
+    if (!token) {
+        return { isAuth: false, error: 'No token provided', req, res, mysql, mongodb, mongoModels: mongoModelsInstance };
+    }
+
+    try {
+        const user = await new Promise<USER_JWT & JwtPayload>((resolve, reject) => {
+            // eslint-disable-next-line consistent-return
+            jwt.verify(token, app.secretSign, (err, decoded) => {
+                if (err) return reject(err);
+                if (!decoded || typeof decoded === 'string') return reject(new Error('Invalid token format'));
+                resolve(decoded as USER_JWT & JwtPayload);
+            });
         });
-    });
-    return await user
-        .then((result: USER_JWT & JwtPayload) => ({
-            isAuth: true,
-            user: result,
-            req,
-            res,
-        }))
-        .catch((err: Error) => ({
-            isAuth: false,
-            error: err.message,
-            req,
-            res,
-        }));
+        return { isAuth: true, users: user, req, res, mysql, mongodb, mongoModels: mongoModelsInstance, error: null };
+    } catch (err) {
+        return { isAuth: false, error: (err as Error).message, req, res, mysql, mongodb, mongoModels: mongoModelsInstance };
+    }
 };
 
-const context = async ({
-    req,
-    res,
-}: ContextFunctionProps): Promise<LapContext> => {
+const context = async ({ req, res }: ContextFunctionProps): Promise<LapContext> => {
     const token = req.headers?.authorization || '';
-    const auth = await authentication(token, req, res);
-    return {
-        ...auth,
-        // ...appContext,
-    };
+    return authentication(token, req, res);
 };
+
 const getDynamicContext = async (
-    ctx: Context<
-        Record<string, unknown> | undefined,
-        Extra & Partial<Record<PropertyKey, never>>
-    >,
-    msg: SubscribeMessage,
-    args: ExecutionArgs
-) => {
-    if (ctx.connectionParams?.authentication) {
-        // TODO
-        console.log('msg: ', msg);
-        console.log('args: ', args);
-        return { currentUser: { id: 1 } };
+    ctx: Context<Record<string, unknown> | undefined, Extra & Partial<Record<PropertyKey, never>>>
+): Promise<{ currentUser: USER_JWT | null; mysql: Sequelize; mongodb: typeof mongoose; mongoModels: typeof mongoModels }> => {
+    const token = ctx.connectionParams?.authentication as string | undefined;
+    const mysql = globalMysqlInstance;
+    const mongodb = globalMongodbInstance;
+    const mongoModelsInstance = mongoModels;
+
+    if (token) {
+        try {
+            const decoded = await new Promise<USER_JWT & JwtPayload>((resolve, reject) => {
+                // eslint-disable-next-line consistent-return
+                jwt.verify(token, app.secretSign, (err, decoded) => {
+                    if (err) return reject(err);
+                    if (!decoded || typeof decoded === 'string') return reject(new Error('Invalid token format'));
+                    resolve(decoded as USER_JWT & JwtPayload);
+                });
+            });
+            return { currentUser: decoded, mysql, mongodb, mongoModels: mongoModelsInstance };
+        } catch (err) {
+            console.error('WebSocket auth error:', err);
+        }
     }
-    return { currentUser: null };
+    return { currentUser: null, mysql, mongodb, mongoModels: mongoModelsInstance };
 };
 
 async function startServer() {
-    await Promise.all([syncDatabase()]);
+    globalMysqlInstance = await syncDatabase();
+    globalMongodbInstance = await connectMongo();
+
     const appSrv = express();
-    const schema = makeExecutableSchema({
-        typeDefs,
-        resolvers,
-    });
+    const schema = makeExecutableSchema({ typeDefs, resolvers });
     const httpServer = createServer(appSrv);
 
-    // Create WebSocket server using the HTTP server.
     const wsServer = new WebSocketServer({
         server: httpServer,
         path: '/subscriptions',
     });
-    // Save the returned server's info that we can shut down this server later
+
     const serverCleanup = useServer(
         {
             schema,
-            context: async (ctx, msg, args) => {
-                console.log('msg: ');
-                return getDynamicContext(ctx, msg, args);
-            },
-            onConnect: async () => {
-                console.log('A client connected!');
-            },
-            onDisconnect() {
-                console.log('Disconnected!');
-            },
+            context: async (ctx) => getDynamicContext(ctx),
+            onConnect: async () => console.log('WebSocket: client connected!'),
+            onDisconnect: () => console.log('WebSocket: client disconnected!'),
         },
         wsServer
     );
 
     const server = new ApolloServer<LapContext>({
-        typeDefs,
-        resolvers,
+        schema,
         csrfPrevention: true,
         plugins: [
             ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -152,51 +147,33 @@ async function startServer() {
             },
         ],
     });
+
     if (process.env.NODE_ENV === 'development') {
         server.addPlugin(
             ApolloServerPluginLandingPageGraphQLPlayground({
-                title: 'Recruitment-API in development',
+                title: 'GraphQL Playground',
                 settings: {
-                    'general.betaUpdates': false,
                     'editor.theme': 'dark',
-                    'editor.cursorShape': 'line',
-                    'editor.reuseHeaders': true,
-                    'tracing.hideTracingResponse': true,
-                    'queryPlan.hideQueryPlanResponse': true,
                     'editor.fontSize': 14,
-                    'editor.fontFamily':
-                        '"Source Code Pro", "Consolas", "Inconsolata", "Droid Sans Mono", "Monaco", monospace',
                     'request.credentials': 'omit',
                     'schema.polling.enable': false,
                 },
-                // tabs: await queryExample(),
+                tabs: await queryExample(),
                 subscriptionEndpoint: `ws://${app.host}:${app.port}/subscriptions`,
             })
         );
     }
 
     await server.start();
-    // This middleware should be added before calling `applyMiddleware`.
-    // appSrv.use(graphqlUploadExpress());
     appSrv.use(cors());
-    appSrv.use(
-        '/graphql',
-        bodyParser.json(),
-        expressMiddleware(server, {
-            context,
-        })
-    );
+    appSrv.use('/graphql', bodyParser.json(), expressMiddleware(server, { context }));
+
     await new Promise<void>((resolve) => {
         httpServer.listen({ port: app.port, hostname: app.host }, resolve);
-        console.log(
-            `🚀 Server ready at http://${app.host}:${app.port}/graphql`
-        );
-        // console.log(
-        //     `🚀 Subscription endpoint ready at ws://${app.host}:${app.port}/subscriptions`
-        // );
+        console.log(`🚀 Server ready at http://${app.host}:${app.port}/graphql`);
     });
 }
 
 startServer().catch((error) => {
-    console.error('Unable start server: ', error);
+    console.error('Unable to start server:', error);
 });

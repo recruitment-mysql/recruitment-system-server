@@ -9,4 +9,4 @@ generates:
       - 'typescript-resolvers'
     config:
       mappers:
-        User: ../db_models/init-models#users
+        User: ../db_models/sql/init-models#users

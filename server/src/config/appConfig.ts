@@ -36,4 +36,7 @@ export const database = {
         db_password: process.env.MYSQL_PASSWORD || 'recruitment',
         option: mysql_option,
     },
+    MONGODB: {
+        uri: process.env.MONGO_URI || 'mongodb://localhost:27017/recruitment_db',
+    },
 };
