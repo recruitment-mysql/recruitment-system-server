@@ -18,4 +18,9 @@ export const variables = {
             role:1,
         },
     },
+    forgot_password: {
+        input: {
+            email: 'dn4810303@gmail.com'
+        },
+    },
 };

@@ -1,10 +1,12 @@
 extend type Query {
-    users: [User]
+    users: User!
     login(input: UserLoginInput!): UserLoginResponse!
     greeting: String!
 }
 extend type Mutation {
     register(input: CreateUserInput!): User!
+    forgot_password(input: forgot_password_input!): SuccessResponse!
+    change_password(input : change_password_Input!):SuccessResponse!
 }
 type User {
     user_id: Int!,
@@ -20,6 +22,13 @@ type User {
 input UserLoginInput {
     email: String!
     password: String!
+}
+input forgot_password_input{
+    email : String!
+}
+input change_password_Input {
+    password_old: String!
+    password_new: String!
 }
 type UserLoginResponse {
     token: String!

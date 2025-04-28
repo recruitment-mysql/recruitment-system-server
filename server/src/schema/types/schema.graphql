@@ -6,6 +6,8 @@ schema {
 }
 
 type Mutation {
+    change_password(input: change_password_Input!): SuccessResponse!
+    forgot_password(input: forgot_password_input!): SuccessResponse!
     register(input: CreateUserInput!): User!
 }
 
@@ -17,7 +19,7 @@ type PageInfo {
 type Query {
     greeting: String!
     login(input: UserLoginInput!): UserLoginResponse!
-    users: [User]
+    users: User!
 }
 
 type User {
@@ -66,4 +68,13 @@ input PaginationInput {
 input UserLoginInput {
     email: String!
     password: String!
+}
+
+input change_password_Input {
+    password_new: String!
+    password_old: String!
+}
+
+input forgot_password_input {
+    email: String!
 }
