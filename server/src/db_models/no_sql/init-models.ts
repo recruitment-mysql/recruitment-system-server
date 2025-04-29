@@ -1,3 +1,4 @@
+import type { Model } from 'mongoose';
 import Candidate from './candidate';
 import type { ICandidate } from './candidate';
 import Employer from './employer';
@@ -21,16 +22,19 @@ export type {
     IFollow
 };
 
-export function initModels() {
-    const candidate = Candidate;
-    const employer = Employer;
-    const job = Job;
-    const follow = Follow;
+// 👉 define type của return object
+export interface NoSQLModels {
+    candidate: Model<ICandidate>;
+    employer: Model<IEmployer>;
+    job: Model<IJob>;
+    follow: Model<IFollow>;
+}
 
+export function initModels(): NoSQLModels {
     return {
-        candidate,
-        employer,
-        job,
-        follow
+        candidate: Candidate,
+        employer: Employer,
+        job: Job,
+        follow: Follow,
     };
 }

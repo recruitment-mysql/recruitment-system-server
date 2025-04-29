@@ -31,6 +31,7 @@ const prettifyJsonString = (variable: any) => JSON.stringify(variable, null, 2);
 
 const register = importGraphqlString('./mutations/register/register.graphql');
 const forgot_password = importGraphqlString('./mutations/forgot_password/forgot_password.graphql');
+const change_password = importGraphqlString('./mutations/change_password/change_password.graphql');
 
 const login = importGraphqlString('./queries/login/login.graphql');
 
@@ -60,6 +61,13 @@ export const queryExample = async (
             name: ' quên mật khẩu ',
             query: forgot_password,
             variables: prettifyJsonString(variables.forgot_password),
+        },
+        {
+            endpoint: path,
+            name: ' Đổi mật khẩu  ',
+            query: change_password,
+            variables: prettifyJsonString(variables.change_password),
+            headers: userAuth,
         },
     ];
 };

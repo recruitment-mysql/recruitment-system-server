@@ -7,10 +7,16 @@ import {Transaction} from 'sequelize';
 import fs from 'fs';
 import path from 'path';
 import * as crypto from 'crypto';
+import { models } from '../../db_loaders/mongodb';
 import {db, sequelize} from '../../db_loaders/mysql';
 import {checkAuthentication} from '../../lib/ultis/permision';
 import {IResolvers, ISuccessResponse} from '../../__generated__/graphql';
-import {MySQLError, UserAlreadyExistError, UserNotFoundError} from '../../lib/classes/graphqlErrors';
+import {
+    AuthenticationError,
+    MySQLError,
+    UserAlreadyExistError,
+    UserNotFoundError
+} from '../../lib/classes/graphqlErrors';
 import {generateJWT} from '../../lib/ultis/jwt';
 import {DefaultHashValue} from '../../lib/enum';
 import {usersCreationAttributes} from '../../db_models/sql/users';
@@ -20,17 +26,31 @@ import {sendEmail} from '../../lib/sendEmail';
 
 const userResolver: IResolvers = {
     Query: {
-        // eslint-disable-next-line no-empty-pattern
-        users: async (_parent, {}, context) => {
-            checkAuthentication(context);
-            const { user } = context;
-            if (user?.id) {
-                return await db.users.findByPk(user.id, {
-                    rejectOnEmpty: new UserNotFoundError('Người dùng không tồn tại'),
-                });
+        getUserProfile: async (_parent, {user_id },context) =>{
+            const requesterId = context.user?.user_id || null;
+            const requesterRole = context.user?.role || null    le 0-pơ=;
+            const isSelf = requesterId === user_id;26+0000000000000000000000000000000000000000+.7.
+            const isGuest = !requesterId;
+
+            const user = await db.users.findByPk(user_id);
+            const candidate = await models.candidate.findOne({ user_id });
+            const employer = await models.employer.findOne({ user_id });
+
+            if (isGuest && candidate) {
+                throw new AuthenticationError('Khách không được xem hồ sơ ứng viên');
             }
-            throw new UserNotFoundError('Người dùng không tồn tại');
+
+            return {
+                user: selectUserFields(user, isSelf),
+                candidateProfile: candidate
+                    ? filterCandidateData(candidate, isSelf || requesterRole === "employer")
+                    : null,
+                employerProfile: employer
+                    ? filterEmployerData(employer, isSelf || candidate || isGuest)
+                    : null
+            }
         },
+            // eslint-disable-next-line no-empty-pattern
         login: async (_parent, { input }) => {
             const { email, password } = input;
             const user = await db.users.findOne({

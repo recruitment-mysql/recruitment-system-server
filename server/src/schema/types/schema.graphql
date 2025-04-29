@@ -5,6 +5,60 @@ schema {
     mutation: Mutation
 }
 
+type Branch {
+    name: String!
+    specific_address: Int!
+}
+
+type Candidate {
+    candidate_id: String!
+    cv_url: String
+    degree: Degree
+    experience: [CandidateExperience!]
+    skills: [Skill!]
+    status: Boolean
+    total_experience_years: Int
+    updated_at: Date
+    user_id: Int!
+}
+
+type CandidateExperience {
+    company: String!
+    industry: Industry
+    role: String!
+    years: Int!
+}
+
+type Degree {
+    degree_id: Int!
+    name: String!
+}
+
+type Employer {
+    branches: [Branch!]
+    city_address: String
+    description: String
+    employer_id: String!
+    industry: Industry
+    interest: Interest
+    number_of_employees: Int
+    social_links: SocialLinks
+    status: Boolean
+    updated_at: Date
+    user_id: Int!
+}
+
+type Industry {
+    industry_id: Int!
+    name: String!
+}
+
+type Interest {
+    award: String
+    insurance: String
+    salary: String
+}
+
 type Mutation {
     change_password(input: change_password_Input!): SuccessResponse!
     forgot_password(input: forgot_password_input!): SuccessResponse!
@@ -17,17 +71,27 @@ type PageInfo {
 }
 
 type Query {
+    getUserProfile(user_id: Int!): UserProfile
     greeting: String!
     login(input: UserLoginInput!): UserLoginResponse!
-    users: User!
+}
+
+type Skill {
+    name: String!
+    skill_id: Int!
+}
+
+type SocialLinks {
+    facebook: String
+    linkedin: String
+    website: String
 }
 
 type User {
-    avarta: String
+    avatar: String
     created_at: Date
     email: String!
     full_name: String
-    password_hash: String!
     role: Int!
     updated_at: Date
     user_id: Int!
@@ -35,6 +99,12 @@ type User {
 
 type UserLoginResponse {
     token: String!
+    user: User!
+}
+
+type UserProfile {
+    candidateProfile: Candidate
+    employerProfile: Employer
     user: User!
 }
 

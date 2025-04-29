@@ -46,4 +46,4 @@ export const connectMongo = async (): Promise<typeof mongoose> => {
 };
 
 export const models = initModels();
-export * as db from '../db_models/no_sql/init-models';
+export * as db_mongo from '../db_models/no_sql/init-models';

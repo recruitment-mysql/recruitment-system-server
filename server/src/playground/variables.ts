@@ -23,4 +23,10 @@ export const variables = {
             email: 'dn4810303@gmail.com'
         },
     },
+    change_password: {
+        input: {
+            password_old: password,
+            password_new: '111111'
+        },
+    },
 };
