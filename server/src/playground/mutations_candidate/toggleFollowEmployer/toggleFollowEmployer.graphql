@@ -1,0 +1,3 @@
+mutation toggleFollowEmployer($input: toggleFollowEmployerInput!)  {
+    toggleFollowEmployer(input: $input)
+}

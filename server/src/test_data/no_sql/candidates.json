@@ -1,0 +1,52 @@
+[
+  {
+    "candidate_id": 2,
+    "user_id": 2,
+    "skills": [1, 2],
+    "experience": [
+      {
+        "company": "Tech Corp",
+        "role": "Software Engineer",
+        "years": 2,
+        "industry_id": 1
+      },
+      {
+        "company": "Data Solutions",
+        "role": "Junior Developer",
+        "years": 1,
+        "industry_id": 2
+      }
+    ],
+    "job_selection_criteria" : {
+      "salary" : 2000,
+      "city_address": "Ha Noi",
+      "degree": 1,
+      "job_categories":[1,4,3]
+    },
+    "status": true,
+    "total_experience_years": 3,
+    "updated_at": "2025-04-26T00:00:00.000Z"
+  },
+  {
+    "candidate_id": 5,
+    "user_id": 5,
+    "skills": [3],
+    "experience": [
+      {
+        "company": "AI Innovations",
+        "role": "Data Scientist",
+        "years": 4,
+        "industry_id": 3
+      }
+    ],
+    "job_selection_criteria" : {
+      "salary" : 2040,
+      "city_address": "HCM",
+      "degree": 3,
+      "job_categories":[2,4,3]
+    },
+    "status": false,
+    "total_experience_years": 4,
+    "updated_at": "2025-04-26T00:00:00.000Z"
+  }
+]

@@ -1,0 +1,3 @@
+mutation UpdateJobStatus($jobId: ID!, $status: Int!) {
+    updateJobStatus(jobId: $jobId, status: $status)
+}

@@ -1,0 +1,3 @@
+mutation ToggleFollowJob($input: toggleFollowJob!)  {
+    ToggleFollowJob(input: $input)
+}

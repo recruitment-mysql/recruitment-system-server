@@ -1,0 +1,34 @@
+query {
+    meEmployer {
+        employer_id
+        branches {
+            name
+            specific_address
+        }
+        city_address{
+            city_address
+            specific_address
+        }
+        description
+        employer_id
+        industry{
+            industry_id
+            name
+        }
+        interest {
+            salary
+            insurance
+            award
+        }
+        name_employer
+        number_of_employees
+        social_links {
+            website
+            facebook
+            linkedin
+        }
+        status
+        updated_at
+        user_id
+    }
+}

@@ -1,14 +1,128 @@
 extend type Query {
-    users: [User]
+    getUserProfile(user_id: Int!): UserProfile
+    login(input: UserLoginInput!): UserLoginResponse!
     greeting: String!
 }
+extend type Mutation {
+    register(input: CreateUserInput!): User!
+    registerAdmin(input: CreateUserInput!): User!
+    forgot_password(input: forgot_password_input!): SuccessResponse!
+    change_password(input : change_password_Input!):SuccessResponse!
+    update_profile(input : update_profile!) :SuccessResponse!
+}
+scalar Date
 
 type User {
-    id: Int!
-    firstName: String!
-    lastName: String!
-    phoneNumber: Int
+    user_id: Int!
+    email: String
+    avatar: String
+    full_name: String!
+    number_phone : String
     role: Int!
-    createdAt: Date
-    updatedAt: Date
+    created_at: Date
+    updated_at: Date
+}
+
+type UserProfile {
+    user: User!
+    candidateProfile: Candidate
+    employerProfile: Employer
+}
+
+type Candidate {
+    candidate_id: Int!
+    user_id: Int!
+    cv_url: String
+    skills: [Skill]
+    job_selection_criteria : job_selection_criteria_Schema,
+    experience: [CandidateExperience]
+    status: Boolean
+    total_experience_years: Int
+    updated_at: Date
+}
+type job_selection_criteria_Schema {
+    salary : Int,
+    city_address: String,
+    degree: Int,
+    job_categories: [job_categories],
+}
+
+type CandidateExperience {
+    company: String!
+    role: String!
+    years: Int!
+    industry: Industry
+}
+type Employer {
+    employer_id: Int!
+    user_id: Int!
+    name_employer : String
+    industry: [Industry]
+    social_links: SocialLinks
+    description: String
+    number_of_employees: Int
+    branches: [Branch]
+    city_address: TypeHeadquarters
+    interest: Interest
+    status: Boolean
+    updated_at: Date
+}
+
+type SocialLinks {
+    website: String
+    facebook: String
+    linkedin: String
+}
+
+type Branch {
+    id: Int!
+    name: String!
+    specific_address: String!
+    city: String!
+}
+
+type Interest {
+    salary: String
+    insurance: String
+    award: String
+}
+
+type Skill {
+    skill_id: Int!
+    name: String!
+}
+type Industry {
+    industry_id: Int!
+    name: String!
+}
+
+
+input update_profile{
+    name : String,
+    avatar : Upload,
+    number_phone : String
+}
+
+input UserLoginInput {
+    email: String!
+    password: String!
+}
+input forgot_password_input{
+    email : String!
+}
+input change_password_Input {
+    password_old: String!
+    password_new: String!
+}
+type UserLoginResponse {
+    token: String!
+    user: User!
+}
+input CreateUserInput {
+    email: String!
+    password: String!
+    full_name: String!
+    role: Int!
+    number_phone : String!
+    avatar:Upload
 }

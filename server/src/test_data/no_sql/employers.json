@@ -1,0 +1,41 @@
+[
+  {
+    "employer_id": 4,
+    "user_id": 4,
+    "name_employer": "emp001",
+    "industry_id": [1, 2],
+    "social_links": { "website": "https://www.example.com", "facebook": "https://facebook.com/example" },
+    "description": "We are a leading tech company specializing in full stack development.",
+    "number_of_employees": 100,
+    "branches": [
+      { "id": 1,"name": "Hanoi Office", "specific_address": "123 Hanoi St, Hanoi", "city": "Hanoi" },
+      { "id": 2,"name": "Ho Chi Minh Office", "specific_address": "456 HCM St, HCM", "city": "Ho Chi Minh" }
+    ],
+    "city_address": {
+      "specific_address" :"45 HCM St, HCM",
+       "city_address" : "Ho Chi Minh"
+    },
+    "interest": { "salary": "Competitive", "insurance": "Healthcare", "award": "Annual Bonus" },
+    "status": true,
+    "updated_at": "2025-05-05T12:00:00Z"
+  },
+  {
+    "employer_id": 3,
+    "user_id": 3,
+    "name_employer": "emp003",
+    "industry_id": [3],
+    "social_links": { "facebook": "https://facebook.com/healthcarecompany", "linkedin": "https://linkedin.com/company/healthcarecompany" },
+    "description": "We provide healthcare services and solutions for hospitals.",
+    "number_of_employees": 200,
+    "branches": [
+      { "id": 1,"name": "Hanoi Office", "specific_address": "123 Hanoi St, Hanoi", "city": "Ha noi" }
+    ],
+    "city_address": {
+      "specific_address" :"218 lĩnh Nam",
+      "city_address" : "Ha noi"
+    },
+    "interest": { "salary": "Competitive", "insurance": "Healthcare", "award": "Annual Performance Bonus" },
+    "status": true,
+    "updated_at": "2025-05-05T12:00:00Z"
+  }
+]

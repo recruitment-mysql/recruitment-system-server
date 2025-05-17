@@ -1,0 +1,7 @@
+[
+  { "industry_id": 1, "name": "software development" },
+  { "industry_id": 2, "name": "accounting" },
+  { "industry_id": 3, "name": "medical services" },
+  { "industry_id": 4, "name": "digital marketing" },
+  { "industry_id": 5, "name": "online education" }
+]
