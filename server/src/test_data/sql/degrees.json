@@ -1,7 +1,0 @@
-[
-  { "degree_id": 1, "name": "Bachelor's Degree" },
-  { "degree_id": 2, "name": "Master's Degree" },
-  { "degree_id": 3, "name": "Doctorate" },
-  { "degree_id": 4, "name": "Associate Degree" },
-  { "degree_id": 5, "name": "High School Diploma" }
-]

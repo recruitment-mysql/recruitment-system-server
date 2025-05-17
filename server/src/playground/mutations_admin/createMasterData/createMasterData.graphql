@@ -1,0 +1,3 @@
+mutation CreateMasterData($input: MasterDataInput!) {
+    createMasterData(input: $input)
+}

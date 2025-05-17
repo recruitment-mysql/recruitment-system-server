@@ -1,0 +1,27 @@
+query {
+    meCandidate {
+        candidate_id
+        cv_url
+        degree{
+            degree_id
+            name
+        }
+        experience{
+            company
+            industry{
+                industry_id
+                name
+            }
+            role
+            years
+        }
+        skills{
+            name
+            skill_id
+        }
+        status
+        total_experience_years
+        updated_at
+        user_id
+    }
+}

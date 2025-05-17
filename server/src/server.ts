@@ -6,6 +6,12 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { useServer, Extra } from 'graphql-ws/lib/use/ws';
 import bodyParser from 'body-parser';
 import { Context } from 'graphql-ws';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+// eslint-disable-next-line import/extensions
+// import type { FileUpload } from "graphql-upload/processRequest.js";
+// eslint-disable-next-line import/extensions
+import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import * as dotenv from 'dotenv';
 import { WebSocketServer } from 'ws';
 import cors from 'cors';
@@ -17,10 +23,11 @@ import mongoose from 'mongoose';
 import resolvers from './schema/resolvers';
 import typeDefs from './schema/types';
 import { syncDatabase } from './db_loaders/mysql';
-import { connectMongo, models as mongoModels, db } from './db_loaders/mongodb';
+import {connectMongo, models as mongoModels, db_mongo, models} from './db_loaders/mongodb';
 import { app } from './config/appConfig';
 import { USER_JWT } from './lib/ultis/jwt';
 import { queryExample } from './playground';
+
 
 dotenv.config();
 
@@ -30,13 +37,13 @@ let globalMongodbInstance: typeof mongoose;
 
 export interface LapContext {
     isAuth: boolean;
-    users?: USER_JWT;
+    user?: USER_JWT;
     error: any;
     req: express.Request;
     res: express.Response;
     mysql: Sequelize;
     mongodb: typeof mongoose;
-    mongoModels: ReturnType<typeof db.initModels>;
+    mongoModels: ReturnType<typeof db_mongo.initModels>;
 }
 
 interface ContextFunctionProps {
@@ -71,7 +78,7 @@ const authentication = async (
                 resolve(decoded as USER_JWT & JwtPayload);
             });
         });
-        return { isAuth: true, users: user, req, res, mysql, mongodb, mongoModels: mongoModelsInstance, error: null };
+        return { isAuth: true, user, req, res, mysql, mongodb, mongoModels: mongoModelsInstance, error: null };
     } catch (err) {
         return { isAuth: false, error: (err as Error).message, req, res, mysql, mongodb, mongoModels: mongoModelsInstance };
     }
@@ -93,7 +100,7 @@ const getDynamicContext = async (
     if (token) {
         try {
             const decoded = await new Promise<USER_JWT & JwtPayload>((resolve, reject) => {
-                // eslint-disable-next-line consistent-return
+                // eslint-disable-next-line consistent-return,no-shadow
                 jwt.verify(token, app.secretSign, (err, decoded) => {
                     if (err) return reject(err);
                     if (!decoded || typeof decoded === 'string') return reject(new Error('Invalid token format'));
@@ -113,6 +120,41 @@ async function startServer() {
     globalMongodbInstance = await connectMongo();
 
     const appSrv = express();
+    // eslint-disable-next-line consistent-return
+    appSrv.get('/avatar/:userId', async (req, res) => {
+        try {
+            const userId = parseInt(req.params.userId, 10);
+            const avatar = await models.avatar.findOne({ user_id: userId });
+
+            if (!avatar || !avatar.data) {
+                return res.status(404).send('Avatar not found');
+            }
+
+            res.set('Content-Type', avatar.contentType);
+            res.send(avatar.data);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Internal server error');
+        }
+    });
+    // eslint-disable-next-line consistent-return
+    appSrv.get('/CvFile/:userId', async (req, res) => {
+        try {
+            const userId = parseInt(req.params.userId, 10);
+            const CvFile = await models.cvFile.findOne({ candidate_id: userId });
+
+            if (!CvFile || !CvFile.data) {
+                return res.status(404).send('CvFile not found');
+            }
+
+            res.set('Content-Type', CvFile.contentType);
+            res.send(CvFile.data);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Internal server error');
+        }
+    });
+
     const schema = makeExecutableSchema({ typeDefs, resolvers });
     const httpServer = createServer(appSrv);
 
@@ -164,14 +206,24 @@ async function startServer() {
         );
     }
 
+
     await server.start();
+
     appSrv.use(cors());
-    appSrv.use('/graphql', bodyParser.json(), expressMiddleware(server, { context }));
+    appSrv.use(graphqlUploadExpress());
+    appSrv.use(
+        '/graphql',
+        bodyParser.json({ limit: '50mb' }),
+        expressMiddleware(server, {
+            context,
+        })
+    );
 
     await new Promise<void>((resolve) => {
         httpServer.listen({ port: app.port, hostname: app.host }, resolve);
         console.log(`🚀 Server ready at http://${app.host}:${app.port}/graphql`);
     });
+
 }
 
 startServer().catch((error) => {

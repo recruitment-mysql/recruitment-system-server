@@ -1,0 +1,3 @@
+mutation ApplyJob($jobId: ID!) {
+    apply_job(jobId: $jobId)
+}

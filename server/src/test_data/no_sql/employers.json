@@ -1,60 +1,41 @@
 [
   {
-    "employer_id": "emp_001",
-    "user_id": 3,
-    "industry_id": 1,
-    "social_links": {
-      "website": "https://techcorp.com",
-      "facebook": "https://facebook.com/techcorp",
-      "youtube": "https://youtube.com/techcorp"
-    },
-    "description": "ahoho",
-    "number_of_employees": 30,
+    "employer_id": 4,
+    "user_id": 4,
+    "name_employer": "emp001",
+    "industry_id": [1, 2],
+    "social_links": { "website": "https://www.example.com", "facebook": "https://facebook.com/example" },
+    "description": "We are a leading tech company specializing in full stack development.",
+    "number_of_employees": 100,
     "branches": [
-      {
-        "name": "Chi nhánh Thanh Xuân ",
-        "specific_address": 1
-      },
-      {
-        "name": "Chi nhánh Thái Bình",
-        "specific_address": 2
-      }
+      { "id": 1,"name": "Hanoi Office", "specific_address": "123 Hanoi St, Hanoi", "city": "Hanoi" },
+      { "id": 2,"name": "Ho Chi Minh Office", "specific_address": "456 HCM St, HCM", "city": "Ho Chi Minh" }
     ],
-    "City_address": "Ha Noi",
-    "interest": {
-      "salary": "Mức lương hấp dẫn theo năng lực, thưởng KPI, thưởng cuối năm,...",
-      "insurance": "Đóng bảo hiểm nguyên lương, ngoài ra còn có bảo hiểm y tế tư nhân",
-      "award": "Tặng quà 20/10, Men's Day, sinh nhật, Christmas, YEP,... và các hoạt động thể thao, giải trí khác."
+    "city_address": {
+      "specific_address" :"45 HCM St, HCM",
+       "city_address" : "Ho Chi Minh"
     },
+    "interest": { "salary": "Competitive", "insurance": "Healthcare", "award": "Annual Bonus" },
     "status": true,
-    "updated_at": "2025-04-26T00:00:00.000Z"
+    "updated_at": "2025-05-05T12:00:00Z"
   },
   {
-    "employer_id": "emp_002",
-    "user_id": 4,
-    "industry_id": 3,
-    "social_links": {
-      "website": "https://aiinnovations.com"
-    },
-    "description": "ahihi",
-    "number_of_employees": 20,
+    "employer_id": 3,
+    "user_id": 3,
+    "name_employer": "emp003",
+    "industry_id": [3],
+    "social_links": { "facebook": "https://facebook.com/healthcarecompany", "linkedin": "https://linkedin.com/company/healthcarecompany" },
+    "description": "We provide healthcare services and solutions for hospitals.",
+    "number_of_employees": 200,
     "branches": [
-      {
-        "name": "Chi nhánh Hà Nội ",
-        "specific_address": 1
-      },
-      {
-        "name": "Chi nhánh HCM",
-        "specific_address": 2
-      }
+      { "id": 1,"name": "Hanoi Office", "specific_address": "123 Hanoi St, Hanoi", "city": "Ha noi" }
     ],
-    "City_address": "Thai Binh",
-    "interest": {
-      "salary": "Mức lương hấp dẫn theo năng lực, thưởng KPI, thưởng cuối năm,...",
-      "insurance": "Đóng bảo hiểm nguyên lương, ngoài ra còn có bảo hiểm y tế tư nhân",
-      "award": "Tặng quà 20/10, Men's Day, sinh nhật, Christmas, YEP,... và các hoạt động thể thao, giải trí khác."
+    "city_address": {
+      "specific_address" :"218 lĩnh Nam",
+      "city_address" : "Ha noi"
     },
+    "interest": { "salary": "Competitive", "insurance": "Healthcare", "award": "Annual Performance Bonus" },
     "status": true,
-    "updated_at": "2025-04-26T00:00:00.000Z"
+    "updated_at": "2025-05-05T12:00:00Z"
   }
 ]

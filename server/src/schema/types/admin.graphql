@@ -1,0 +1,44 @@
+extend type Query {
+    listUsers(input : listUsersInput!): listUsers!
+    findUserByEmail (email : String!) : UserProfile!
+    pendingJobs(input : pagination!) : JobsResult!
+    pendingEmployers(input : pagination!) : EmployerResultOutPut!
+    getMasterData(type: MasterDataType!): MasterData!
+}
+extend type Mutation {
+    deleteUser( user_id : ID!): SuccessResponse!
+    updateJobStatus (jobId: ID!, status: Int!) : SuccessResponse!
+    updateEmployerStatus(employerId: ID!, status: Boolean!) : SuccessResponse!
+    createMasterData(input: MasterDataInput!): SuccessResponse!
+    updateMasterData(id: ID!, input: MasterDataInput!): SuccessResponse!
+}
+
+input listUsersInput {
+    role: Int!,
+    limit:Int!,
+    page:Int!
+}
+
+type listUsers {
+    information : [UserProfile]!
+    pagination: pagination_Result!
+}
+enum MasterDataType {
+    INDUSTRY
+    JOB_CATEGORY
+    SKILL
+}
+type MasterDataResult {
+    id: ID!
+    name: String!
+}
+input MasterDataInput {
+    type: MasterDataType!
+    name: String!
+}
+type MasterData {
+    industry : [Industry],
+    job_category : [job_categories],
+    skill : [Skill]
+}
+

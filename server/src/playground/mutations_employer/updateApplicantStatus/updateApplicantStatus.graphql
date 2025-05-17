@@ -1,0 +1,3 @@
+mutation UpdateApplicantStatus($input: UpdateApplicantStatusInput!) {
+    updateApplicantStatus(input: $input)
+}

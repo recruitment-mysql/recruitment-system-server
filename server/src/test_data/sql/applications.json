@@ -1,23 +1,23 @@
 [
   {
-    "application_id": "app_001",
-    "job_id": "job_001",
-    "candidate_id": "cand_001",
-    "status": "pending",
+    "application_id": 1,
+    "job_id": "job_002",
+    "candidate_id": 2,
+    "status": 0,
     "applied_at": "2025-04-25T00:00:00Z"
   },
   {
-    "application_id": "app_002",
-    "job_id": "job_002",
-    "candidate_id": "cand_002",
-    "status": "reviewed",
+    "application_id": 2,
+    "job_id": "job_003",
+    "candidate_id": 5,
+    "status": 0,
     "applied_at": "2025-04-24T00:00:00Z"
   },
   {
-    "application_id": "app_003",
-    "job_id": "job_001",
-    "candidate_id": "cand_001",
-    "status": "rejected",
+    "application_id": 3,
+    "job_id": "job_003",
+    "candidate_id": 2,
+    "status": 2,
     "applied_at": "2025-04-23T00:00:00Z"
   }
 ]

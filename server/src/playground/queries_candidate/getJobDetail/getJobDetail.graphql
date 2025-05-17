@@ -1,0 +1,33 @@
+query GetJobDetail($jobId: String!) {
+    getJobDetail(jobId: $jobId) {
+        job_id
+        title
+        description
+        Salary
+        degree
+        experience_years_required
+        foreign_language
+        quantity
+        job_type
+        status
+        created_at
+        updated_at
+        status_application
+        applied_at_application
+        employer_id
+        branches {
+            id
+            name
+            city
+            specific_address
+        }
+        job_categories {
+            category_id
+            name
+        }
+        skills_required {
+            skill_id
+            name
+        }
+    }
+}

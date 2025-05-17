@@ -5,17 +5,26 @@ schema {
     mutation: Mutation
 }
 
+type Applicant {
+    applied_at: Date!
+    candidateProfile: Candidate!
+    status: Int!
+    user: User!
+}
+
 type Branch {
+    city: String!
+    id: Int!
     name: String!
-    specific_address: Int!
+    specific_address: String!
 }
 
 type Candidate {
-    candidate_id: String!
+    candidate_id: Int!
     cv_url: String
-    degree: Degree
-    experience: [CandidateExperience!]
-    skills: [Skill!]
+    experience: [CandidateExperience]
+    job_selection_criteria: job_selection_criteria_Schema
+    skills: [Skill]
     status: Boolean
     total_experience_years: Int
     updated_at: Date
@@ -29,23 +38,29 @@ type CandidateExperience {
     years: Int!
 }
 
-type Degree {
-    degree_id: Int!
-    name: String!
-}
-
 type Employer {
-    branches: [Branch!]
-    city_address: String
+    branches: [Branch]
+    city_address: TypeHeadquarters
     description: String
-    employer_id: String!
-    industry: Industry
+    employer_id: Int!
+    industry: [Industry]
     interest: Interest
+    name_employer: String
     number_of_employees: Int
     social_links: SocialLinks
     status: Boolean
     updated_at: Date
     user_id: Int!
+}
+
+type EmployerResult {
+    employer: Employer!
+    user: User!
+}
+
+type EmployerResultOutPut {
+    employerResult: [EmployerResult]
+    pagination: pagination_Result!
 }
 
 type Industry {
@@ -59,10 +74,42 @@ type Interest {
     salary: String
 }
 
+type JobsResult {
+    jobs: [job]!
+    pagination: pagination_Result!
+}
+
+type MasterData {
+    industry: [Industry]
+    job_category: [job_categories]
+    skill: [Skill]
+}
+
+type MasterDataResult {
+    id: ID!
+    name: String!
+}
+
 type Mutation {
+    apply_job(jobId: ID!): SuccessResponse!
     change_password(input: change_password_Input!): SuccessResponse!
+    createJob(input: CreateJobInput!): SuccessResponse!
+    createMasterData(input: MasterDataInput!): SuccessResponse!
+    deleteJob(jobId: ID!): SuccessResponse!
+    deleteUser(user_id: ID!): SuccessResponse!
     forgot_password(input: forgot_password_input!): SuccessResponse!
     register(input: CreateUserInput!): User!
+    registerAdmin(input: CreateUserInput!): User!
+    toggleFollowEmployer(input: toggleFollowEmployerInput!): SuccessResponse!
+    toggleFollowJob(input: toggleFollowJob!): SuccessResponse!
+    updateApplicantStatus(input: UpdateApplicantStatusInput!): SuccessResponse!
+    updateEmployerProfile(input: UpdateEmployerInput!): SuccessResponse!
+    updateEmployerStatus(employerId: ID!, status: Boolean!): SuccessResponse!
+    updateJob(input: UpdateJobInput!): SuccessResponse!
+    updateJobStatus(jobId: ID!, status: Int!): SuccessResponse!
+    updateMasterData(id: ID!, input: MasterDataInput!): SuccessResponse!
+    update_profile(input: update_profile!): SuccessResponse!
+    upsertCandidate(input: UpsertCandidateInput!): SuccessResponse!
 }
 
 type PageInfo {
@@ -71,9 +118,28 @@ type PageInfo {
 }
 
 type Query {
+    findCandidateByEmail(email: String!): UserProfile!
+    findUserByEmail(email: String!): UserProfile!
+    getAppliedJobs(input: pagination!): JobsResult!
+    getFeaturedEmployers(input: pagination!): EmployerResultOutPut!
+    getFeaturedJobs(input: pagination!): JobsResult!
+    getJobDetail(jobId: String!): job
+    getMasterData(type: MasterDataType!): MasterData!
+    getSavedEmployer(input: pagination!): EmployerResultOutPut!
+    getSavedJobs(input: pagination!): JobsResult!
     getUserProfile(user_id: Int!): UserProfile
     greeting: String!
+    listAllApplicantsByJob: [Applicant]
+    listApplicantsByJob(jobId: ID!): [Applicant]
+    listJobByEmployer(input: listJobByEmployerInput!): JobsResult!
+    listUsers(input: listUsersInput!): listUsers!
     login(input: UserLoginInput!): UserLoginResponse!
+    meCandidate: Candidate!
+    meEmployer: Employer!
+    pendingEmployers(input: pagination!): EmployerResultOutPut!
+    pendingJobs(input: pagination!): JobsResult!
+    searchEmployers(input: searchEmployers!): EmployerResultOutPut!
+    searchJobs(input: searchJobs!): JobsResult!
 }
 
 type Skill {
@@ -87,11 +153,17 @@ type SocialLinks {
     website: String
 }
 
+type TypeHeadquarters {
+    city_address: String!
+    specific_address: String!
+}
+
 type User {
     avatar: String
     created_at: Date
-    email: String!
-    full_name: String
+    email: String
+    full_name: String!
+    number_phone: String
     role: Int!
     updated_at: Date
     user_id: Int!
@@ -108,6 +180,57 @@ type UserProfile {
     user: User!
 }
 
+type job {
+    Salary: Int!
+    applied_at_application: Date
+    branches: [Branch]!
+    created_at: Date
+    degree: Int!
+    description: String!
+    employer_id: Int!
+    experience_years_required: Int!
+    foreign_language: String
+    job_categories: [job_categories]!
+    job_id: String!
+    job_type: Int!
+    quantity: Int!
+    skills_required: [Skill]!
+    status: Int!
+    status_application: String
+    title: String!
+    updated_at: Date
+}
+
+type job_categories {
+    category_id: Int!
+    name: String!
+}
+
+type job_selection_criteria_Schema {
+    city_address: String
+    degree: Int
+    job_categories: [job_categories]
+    salary: Int
+}
+
+type listUsers {
+    information: [UserProfile]!
+    pagination: pagination_Result!
+}
+
+type pagination_Result {
+    limit: Int!
+    page: Int!
+    total: Int!
+    totalPages: Int!
+}
+
+enum MasterDataType {
+    INDUSTRY
+    JOB_CATEGORY
+    SKILL
+}
+
 enum SuccessResponse {
     success
 }
@@ -120,12 +243,39 @@ scalar JSON
 
 scalar Upload
 
+input CreateJobInput {
+    Salary: Int!
+    branches: [Int]!
+    degree: Int!
+    description: String!
+    experience_years_required: Int!
+    foreign_language: String
+    job_categories: [Int]!
+    job_type: Int!
+    quantity: Int!
+    skills_required: [Int]!
+    title: String!
+}
+
 input CreateUserInput {
-    avarta: Upload
+    avatar: Upload
     email: String!
     full_name: String!
+    number_phone: String!
     password: String!
     role: Int!
+}
+
+input Experience {
+    company: String
+    industry_id: Int
+    role: String
+    years: String
+}
+
+input MasterDataInput {
+    name: String!
+    type: MasterDataType!
 }
 
 input PaginationInput {
@@ -133,6 +283,45 @@ input PaginationInput {
     before: Cursor
     first: Int
     last: Int
+}
+
+input UpdateApplicantStatusInput {
+    candidateId: Int!
+    jobId: String!
+    status: Int!
+}
+
+input UpdateEmployerInput {
+    description: String
+    headquarters: headquarters
+    industry_id: [Int]
+    number_of_employees: Int
+    social_links_Facebook: String
+    social_links_Website: String
+    social_links_Youtube: String
+}
+
+input UpdateJobInput {
+    Salary: Int
+    branches: [Int]
+    degree: Int
+    description: String
+    experience_years_required: Int
+    foreign_language: String
+    jobId: ID!
+    job_categories: [Int]
+    job_type: Int
+    quantity: Int
+    skills_required: [Int]
+    status: Int
+    title: String
+}
+
+input UpsertCandidateInput {
+    Experience: Experience
+    file_cv: Upload
+    job_selection_criteria: job_selection_criteria
+    status: Boolean
 }
 
 input UserLoginInput {
@@ -147,4 +336,68 @@ input change_password_Input {
 
 input forgot_password_input {
     email: String!
+}
+
+input headquarters {
+    city_address: String!
+    specific_address: String!
+}
+
+input job_selection_criteria {
+    city_address: String
+    degree: Int
+    job_categories: [Int]
+    salary: String
+}
+
+input listJobByEmployerInput {
+    limit: Int!
+    page: Int!
+    status: Int!
+}
+
+input listUsersInput {
+    limit: Int!
+    page: Int!
+    role: Int!
+}
+
+input pagination {
+    limit: Int!
+    page: Int!
+}
+
+input searchEmployers {
+    city_address: String
+    industries: Int
+    limit: Int!
+    name_Employer: String
+    page: Int!
+}
+
+input searchJobs {
+    Salary_Max: Int
+    Salary_min: Int
+    date: Int
+    degree: Int
+    job_categories: Int
+    job_type: Int
+    limit: Int!
+    page: Int!
+}
+
+input toggleFollowEmployerInput {
+    action: Boolean!
+    employer_id: Int!
+}
+
+input toggleFollowJob {
+    action: Boolean!
+    job_id: String!
+}
+
+input update_profile {
+    avatar: Upload
+    name: String
+    number_phone: String
 }

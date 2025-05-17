@@ -1,0 +1,82 @@
+extend type Query {
+    meEmployer: Employer!
+    listJobByEmployer(input : listJobByEmployerInput!): JobsResult!
+    listApplicantsByJob(jobId: ID!): [Applicant]
+    listAllApplicantsByJob : [Applicant]
+    findCandidateByEmail (email : String!) : UserProfile!
+}
+extend type Mutation {
+    updateEmployerProfile(input: UpdateEmployerInput!): SuccessResponse!
+    createJob(input: CreateJobInput!): SuccessResponse!
+    updateJob(input: UpdateJobInput!): SuccessResponse!
+    updateApplicantStatus(input : UpdateApplicantStatusInput!): SuccessResponse!
+    deleteJob(jobId: ID!): SuccessResponse!
+}
+scalar Date
+
+input UpdateApplicantStatusInput {
+    jobId: String!,
+    candidateId: Int!,
+    status: Int!
+}
+
+input listJobByEmployerInput {
+    limit:Int!,
+    page:Int!
+    status : Int!
+}
+
+input UpdateEmployerInput {
+    headquarters : headquarters
+    industry_id : [Int]
+    description: String
+    social_links_Website: String
+    social_links_Facebook: String
+    social_links_Youtube: String
+    number_of_employees: Int
+}
+input headquarters {
+    city_address : String!
+    specific_address : String!
+}
+type TypeHeadquarters {
+    city_address : String!
+    specific_address : String!
+}
+
+input CreateJobInput {
+    title : String!
+    description : String!
+    skills_required : [Int]!
+    job_categories : [Int]!
+    degree : Int!
+    experience_years_required : Int!
+    quantity : Int!
+    foreign_language : String
+    Salary : Int!
+    job_type : Int!
+    branches : [Int]!
+}
+
+input UpdateJobInput {
+    jobId: ID!,
+    title : String
+    description : String
+    skills_required : [Int]
+    job_categories : [Int]
+    degree : Int
+    experience_years_required : Int
+    quantity : Int
+    foreign_language : String
+    Salary : Int
+    job_type : Int
+    branches : [Int]
+    status : Int
+}
+
+type Applicant {
+    user: User!
+    candidateProfile: Candidate!
+    status : Int!,
+    applied_at : Date!
+}

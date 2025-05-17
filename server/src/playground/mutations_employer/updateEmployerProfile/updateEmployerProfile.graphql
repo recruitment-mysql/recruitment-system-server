@@ -1,0 +1,3 @@
+mutation UpdateEmployerProfile($input: UpdateEmployerInput!) {
+    updateEmployerProfile(input: $input)
+}

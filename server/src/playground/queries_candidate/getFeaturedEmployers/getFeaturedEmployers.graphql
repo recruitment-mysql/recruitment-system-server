@@ -1,0 +1,43 @@
+query GetFeaturedEmployers($input: pagination!) {
+    getFeaturedEmployers(input: $input) {
+        employer {
+            employer_id
+            user_id
+            name_employer
+            description
+            number_of_employees
+            city_address{
+                city_address
+                specific_address
+            }
+            status
+            updated_at
+            social_links {
+                website
+                facebook
+                linkedin
+            }
+            branches {
+                id
+                name
+                city
+                specific_address
+            }
+            industry {
+                industry_id
+                name
+            }
+            interest {
+                salary
+                insurance
+                award
+            }
+        }
+        pagination {
+            page
+            limit
+            total
+            totalPages
+        }
+    }
+}

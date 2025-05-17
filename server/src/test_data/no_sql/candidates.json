@@ -1,10 +1,8 @@
 [
   {
-    "candidate_id": "cand_001",
-    "user_id": 1,
-    "cv_url": "https://drive.google.com/cand_001_cv.pdf",
+    "candidate_id": 2,
+    "user_id": 2,
     "skills": [1, 2],
-    "degree_id": 1,
     "experience": [
       {
         "company": "Tech Corp",
@@ -19,16 +17,20 @@
         "industry_id": 2
       }
     ],
+    "job_selection_criteria" : {
+      "salary" : 2000,
+      "city_address": "Ha Noi",
+      "degree": 1,
+      "job_categories":[1,4,3]
+    },
     "status": true,
     "total_experience_years": 3,
     "updated_at": "2025-04-26T00:00:00.000Z"
   },
   {
-    "candidate_id": "cand_002",
-    "user_id": 2,
-    "cv_url": "https://drive.google.com/cand_002_cv.pdf",
+    "candidate_id": 5,
+    "user_id": 5,
     "skills": [3],
-    "degree_id": 2,
     "experience": [
       {
         "company": "AI Innovations",
@@ -37,6 +39,12 @@
         "industry_id": 3
       }
     ],
+    "job_selection_criteria" : {
+      "salary" : 2040,
+      "city_address": "HCM",
+      "degree": 3,
+      "job_categories":[2,4,3]
+    },
     "status": false,
     "total_experience_years": 4,
     "updated_at": "2025-04-26T00:00:00.000Z"

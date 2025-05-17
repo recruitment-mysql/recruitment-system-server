@@ -5,16 +5,19 @@ extend type Query {
 }
 extend type Mutation {
     register(input: CreateUserInput!): User!
+    registerAdmin(input: CreateUserInput!): User!
     forgot_password(input: forgot_password_input!): SuccessResponse!
     change_password(input : change_password_Input!):SuccessResponse!
+    update_profile(input : update_profile!) :SuccessResponse!
 }
 scalar Date
 
 type User {
     user_id: Int!
-    email: String!
+    email: String
     avatar: String
-    full_name: String
+    full_name: String!
+    number_phone : String
     role: Int!
     created_at: Date
     updated_at: Date
@@ -27,33 +30,40 @@ type UserProfile {
 }
 
 type Candidate {
-    candidate_id: String!
+    candidate_id: Int!
     user_id: Int!
     cv_url: String
-    skills: [Skill!]
-    degree: Degree
-    experience: [CandidateExperience!]
+    skills: [Skill]
+    job_selection_criteria : job_selection_criteria_Schema,
+    experience: [CandidateExperience]
     status: Boolean
     total_experience_years: Int
     updated_at: Date
+}
+type job_selection_criteria_Schema {
+    salary : Int,
+    city_address: String,
+    degree: Int,
+    job_categories: [job_categories],
 }
 
 type CandidateExperience {
     company: String!
     role: String!
     years: Int!
-    industry: Industry         # Từ industry_id -> object Industry
+    industry: Industry
 }
 type Employer {
-    employer_id: String!
+    employer_id: Int!
     user_id: Int!
-    industry: Industry         # industry_id → object
+    name_employer : String
+    industry: [Industry]
     social_links: SocialLinks
     description: String
     number_of_employees: Int
-    branches: [Branch!]        # Danh sách chi nhánh
-    city_address: String
-    interest: Interest         # Phúc lợi
+    branches: [Branch]
+    city_address: TypeHeadquarters
+    interest: Interest
     status: Boolean
     updated_at: Date
 }
@@ -65,8 +75,10 @@ type SocialLinks {
 }
 
 type Branch {
+    id: Int!
     name: String!
-    specific_address: Int!
+    specific_address: String!
+    city: String!
 }
 
 type Interest {
@@ -79,19 +91,17 @@ type Skill {
     skill_id: Int!
     name: String!
 }
-
-type Degree {
-    degree_id: Int!
-    name: String!
-}
-
 type Industry {
     industry_id: Int!
     name: String!
 }
 
 
-
+input update_profile{
+    name : String,
+    avatar : Upload,
+    number_phone : String
+}
 
 input UserLoginInput {
     email: String!
@@ -113,5 +123,6 @@ input CreateUserInput {
     password: String!
     full_name: String!
     role: Int!
-    avarta:Upload
+    number_phone : String!
+    avatar:Upload
 }

@@ -4,7 +4,9 @@
   "email": "admin@gmail.com",
   "password_hash": "$2b$10$CMI9Ftzfa3HJK7gZSNamiOz6/jYu2F2E7wyhEO289.qxDeKvtXJr.",
   "full_name": "John Doe",
+  "number_phone": "0825251868",
   "role": 0,
+  "status" : true,
   "created_at": "2025-04-26T00:00:00.000Z",
   "updated_at": "2025-04-26T00:00:00.000Z"
  },
@@ -13,7 +15,9 @@
   "email": "candidate2@example.com",
   "password_hash": "$2b$10$CMI9Ftzfa3HJK7gZSNamiOz6/jYu2F2E7wyhEO289.qxDeKvtXJr.",
   "full_name": "Jane Smith",
+  "number_phone": "4825251868",
   "role": 1,
+  "status" : true,
   "created_at": "2025-04-26T00:00:00.000Z",
   "updated_at": "2025-04-26T00:00:00.000Z"
  },
@@ -22,7 +26,9 @@
   "email": "employer1@example.com",
   "password_hash": "$2b$10$CMI9Ftzfa3HJK7gZSNamiOz6/jYu2F2E7wyhEO289.qxDeKvtXJr.",
   "full_name": "Tech Corp HR",
+  "number_phone": "3825251868",
   "role": 2,
+  "status" : true,
   "created_at": "2025-04-26T00:00:00.000Z",
   "updated_at": "2025-04-26T00:00:00.000Z"
  },
@@ -31,7 +37,20 @@
   "email": "employer2@example.com",
   "password_hash": "$2b$10$CMI9Ftzfa3HJK7gZSNamiOz6/jYu2F2E7wyhEO289.qxDeKvtXJr.",
   "full_name": "AI Innovations HR",
+  "number_phone": "2825251868",
   "role": 2,
+  "status" : true,
+  "created_at": "2025-04-26T00:00:00.000Z",
+  "updated_at": "2025-04-26T00:00:00.000Z"
+ },
+ {
+  "user_id": 5,
+  "email": "candidate1@example.com",
+  "password_hash": "$2b$10$CMI9Ftzfa3HJK7gZSNamiOz6/jYu2F2E7wyhEO289.qxDeKvtXJr.",
+  "full_name": "Jane ney ney ",
+  "number_phone": "1825251868",
+  "role": 1,
+  "status" : true,
   "created_at": "2025-04-26T00:00:00.000Z",
   "updated_at": "2025-04-26T00:00:00.000Z"
  }

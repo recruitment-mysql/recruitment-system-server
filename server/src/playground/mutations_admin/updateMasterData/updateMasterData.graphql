@@ -1,0 +1,3 @@
+mutation UpdateMasterData($id: ID!, $input: MasterDataInput!) {
+    updateMasterData(id: $id, input: $input)
+}

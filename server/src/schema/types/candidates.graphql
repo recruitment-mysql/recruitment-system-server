@@ -1,0 +1,110 @@
+extend type Query {
+    meCandidate : Candidate!
+    getFeaturedJobs(input : pagination!): JobsResult!
+    getFeaturedEmployers(input : pagination!) : EmployerResultOutPut!
+    getJobDetail(jobId: String!): job
+    searchJobs(input: searchJobs!) : JobsResult!
+    searchEmployers(input: searchEmployers!) : EmployerResultOutPut!
+    getAppliedJobs(input : pagination!) : JobsResult!
+    getSavedJobs(input : pagination!) : JobsResult!
+    getSavedEmployer(input : pagination!) : EmployerResultOutPut!
+}
+extend type Mutation {
+    upsertCandidate(input: UpsertCandidateInput!): SuccessResponse!
+    toggleFollowJob(input: toggleFollowJob!): SuccessResponse!
+    toggleFollowEmployer(input: toggleFollowEmployerInput!): SuccessResponse!
+    apply_job(jobId : ID!) : SuccessResponse!
+}
+scalar Date
+
+input pagination{
+    limit:Int!,
+    page:Int!
+}
+type pagination_Result {
+    total: Int!
+    page: Int!
+    limit: Int!
+    totalPages: Int!
+}
+type EmployerResult {
+    employer: Employer!
+    user : User!
+}
+type EmployerResultOutPut {
+    employerResult : [EmployerResult]
+    pagination: pagination_Result!
+}
+
+
+type JobsResult {
+    jobs: [job]!
+    pagination: pagination_Result!
+}
+input searchJobs {
+    degree : Int,
+    date : Int,
+    job_categories : Int,
+    Salary_min : Int,
+    Salary_Max : Int,
+    job_type : Int,
+    limit:Int!,
+    page:Int!
+}
+input searchEmployers {
+    name_Employer : String,
+    city_address : String,
+    industries : Int
+    limit:Int!,
+    page:Int!
+}
+input UpsertCandidateInput{
+    Experience : Experience,
+    file_cv : Upload,
+    status : Boolean,
+    job_selection_criteria : job_selection_criteria,
+}
+input Experience{
+    company: String,
+    role: String,
+    years: String,
+    industry_id : Int
+}
+input toggleFollowJob{
+    job_id: String!
+    action: Boolean!
+}
+input toggleFollowEmployerInput{
+    employer_id: Int!
+    action: Boolean!
+}
+input job_selection_criteria {
+    salary: String,
+    city_address: String,
+    degree: Int,
+    job_categories: [Int]
+}
+type job {
+    job_id: String!,
+    employer_id: Int!,
+    title: String!,
+    description: String!,
+    skills_required: [Skill]!,
+    job_categories: [job_categories]!,
+    degree: Int!,
+    experience_years_required : Int!,
+    quantity : Int!,
+    foreign_language : String,
+    Salary : Int!,
+    job_type: Int!,
+    status: Int!,
+    branches:[Branch]!,
+    status_application : String
+    applied_at_application : Date,
+    created_at: Date,
+    updated_at: Date,
+}
+type job_categories {
+    category_id: Int!
+    name: String!
+}

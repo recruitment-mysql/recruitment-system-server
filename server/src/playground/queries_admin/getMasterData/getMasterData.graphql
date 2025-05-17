@@ -1,0 +1,16 @@
+query GetMasterData($type: MasterDataType!) {
+    getMasterData(type: $type) {
+        industry {
+            industry_id
+            name
+        }
+        job_category {
+            category_id
+            name
+        }
+        skill {
+            skill_id
+            name
+        }
+    }
+}

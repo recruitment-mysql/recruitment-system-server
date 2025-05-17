@@ -11,7 +11,8 @@
     "codegen": "graphql-codegen --config codegen.yml && npm run prettier:base -- --write \"src/__generated__/*.ts\"",
     "prettier:models": "npm run prettier:base -- --write  \"src/db_models/sql/*.ts\"",
     "prettier:base": "prettier --parser typescript --single-quote --tab-width 4",
-    "lint:fix-model": "eslint --fix --ext .ts ./src/db_models/sql ./src/db_models/nosql"
+    "lint:fix-model": "eslint --fix --ext .ts ./src/db_models/sql ./src/db_models/nosql",
+    "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -82,6 +83,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-graphql": "^0.12.0",
+    "file-type": "14.7.1",
     "graphql": "^16.8.1",
     "graphql-import-node": "^0.0.5",
     "graphql-upload": "^15.0.2",

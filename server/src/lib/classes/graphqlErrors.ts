@@ -86,22 +86,5 @@ export class InValidRoleErrorTypeUser extends GraphQLError {
         });
     }
 }
-export class InValidTypeErrorTypeCollection extends GraphQLError {
-    constructor(message: string | null = null) {
-        super(message || 'Không xác định được kiểu Collection ', {
-            extensions: {
-                code: Chat_ERROR_CODE.InValidType,
-            },
-        });
-    }
-}
-export class InValidTypeErrorTypeStatusCollection extends GraphQLError {
-    constructor(message: string | null = null) {
-        super(message || 'Không xác định được kiểu Status Collection ', {
-            extensions: {
-                code: Chat_ERROR_CODE.InValidType,
-            },
-        });
-    }
-}
+
 

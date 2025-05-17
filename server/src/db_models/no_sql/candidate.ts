@@ -1,4 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
+import {IJob} from './job';
 
 export interface IExperience {
     company: string;
@@ -6,13 +7,18 @@ export interface IExperience {
     years: number;
     industry_id?: number;
 }
+export interface job_selection_criteria {
+    salary?: number;
+    city_address?: string;
+    degree: number;
+    job_categories: number[];
+}
 
 export interface ICandidate extends Document {
-    candidate_id: string;
+    candidate_id: number;
     user_id: number;
-    cv_url?: string;
     skills?: number[];
-    degree_id?: number;
+    job_selection_criteria : job_selection_criteria ;
     experience?: IExperience[];
     total_experience_years?: number;
     status:boolean;
@@ -25,17 +31,27 @@ const experienceSchema = new Schema<IExperience>({
     years: { type: Number, required: true },
     industry_id: Number
 });
+const job_selection_criteria_Schema = new Schema<job_selection_criteria>({
+    salary : Number,
+    city_address: String,
+    degree: { type: Number, required: true },
+    job_categories: {type : [Number], required: true },
+});
 
 const candidateSchema = new Schema<ICandidate>({
-    candidate_id: { type: String, required: true, unique: true },
+    candidate_id: { type: Number, required: true, unique: true },
     user_id: { type: Number, required: true },
-    cv_url: { type: String},
     skills: { type: [Number]},
-    degree_id: Number,
+    job_selection_criteria : job_selection_criteria_Schema,
     experience: [experienceSchema],
     total_experience_years: { type: Number},
     status:{ type: Boolean, required: true },
     updated_at: { type: Date, default: Date.now }
+});
+// eslint-disable-next-line func-names
+candidateSchema.pre<IJob>('save', function (next) {
+    this.updated_at = new Date();
+    next();
 });
 
 export default model<ICandidate>('Candidate', candidateSchema);

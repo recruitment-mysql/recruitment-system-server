@@ -5,21 +5,33 @@ import Employer from './employer';
 import type { IEmployer } from './employer';
 import Job from './job';
 import type { IJob } from './job';
-import Follow from './follow';
-import type { IFollow } from './follow';
+import Follow_employer from './follow_employer';
+import type { IFollow_employer } from './follow_employer';
+import Follow_job from './follow_job';
+import type { IFollow_job } from './follow_job';
+import CvFile from './CvFile';
+import type { ICvFile } from './CvFile';
+import Avatar from './avarta';
+import type { IAvatar } from './avarta';
 
 export {
     Candidate as candidate,
     Employer as employer,
     Job as job,
-    Follow as follow,
+    Follow_job as follow_job,
+    Follow_employer as follow_employer,
+    CvFile as cvFile,
+    Avatar as avatar,
 };
 
 export type {
     ICandidate,
     IEmployer,
     IJob,
-    IFollow
+    IFollow_employer,
+    IFollow_job,
+    IAvatar,
+    ICvFile
 };
 
 // 👉 define type của return object
@@ -27,7 +39,10 @@ export interface NoSQLModels {
     candidate: Model<ICandidate>;
     employer: Model<IEmployer>;
     job: Model<IJob>;
-    follow: Model<IFollow>;
+    follow_job: Model<IFollow_job>;
+    follow_employer: Model<IFollow_employer>;
+    cvFile : Model<ICvFile>;
+    avatar : Model<IAvatar>;
 }
 
 export function initModels(): NoSQLModels {
@@ -35,6 +50,9 @@ export function initModels(): NoSQLModels {
         candidate: Candidate,
         employer: Employer,
         job: Job,
-        follow: Follow,
+        follow_job: Follow_job,
+        follow_employer: Follow_employer,
+        cvFile : CvFile,
+        avatar : Avatar
     };
 }

@@ -4,6 +4,8 @@ import { initModels } from '../db_models/no_sql/init-models';
 import candidates from '../test_data/no_sql/candidates.json';
 import employers from '../test_data/no_sql/employers.json';
 import jobs from '../test_data/no_sql/jobs.json';
+import follow_job from '../test_data/no_sql/follow_job.json';
+import follow_employer from '../test_data/no_sql/follow_employer.json';
 
 mongoose.set('strictQuery', true);
 
@@ -21,6 +23,8 @@ export const connectMongo = async (): Promise<typeof mongoose> => {
             await models.candidate.deleteMany({});
             await models.employer.deleteMany({});
             await models.job.deleteMany({});
+            await models.follow_job.deleteMany({});
+            await models.follow_employer.deleteMany({});
             console.log('Inserting new data...');
             try {
                 await models.candidate.insertMany(candidates);
@@ -28,6 +32,8 @@ export const connectMongo = async (): Promise<typeof mongoose> => {
                 await models.employer.insertMany(employers);
                 console.log('Employers seeded');
                 await models.job.insertMany(jobs);
+                await models.follow_job.insertMany(follow_job);
+                await models.follow_employer.insertMany(follow_employer);
                 console.log('Jobs seeded');
             } catch (insertError) {
                 console.error('Seeding error:', insertError);

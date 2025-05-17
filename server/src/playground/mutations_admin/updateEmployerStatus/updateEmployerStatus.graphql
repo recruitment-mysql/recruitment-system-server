@@ -1,0 +1,3 @@
+mutation UpdateEmployerStatus($employerId: ID!, $status: Boolean!) {
+    updateEmployerStatus(employerId: $employerId, status: $status)
+}

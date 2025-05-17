@@ -4,6 +4,6 @@ mutation Register($input: CreateUserInput!) {
         email
         role
         full_name
-        avarta
+        avatar
     }
 }

@@ -1,0 +1,16 @@
+query ListApplicantsByJob($jobId: ID!) {
+    listApplicantsByJob(jobId: $jobId) {
+        user_id
+        email
+        avatar
+        full_name
+        cv_url
+        degree
+        experience
+        skills
+        total_experience_years
+        updated_at
+        status
+        applied_at
+    }
+}

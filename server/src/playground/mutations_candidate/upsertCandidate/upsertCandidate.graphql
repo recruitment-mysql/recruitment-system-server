@@ -1,0 +1,3 @@
+mutation UpsertCandidate($input: UpsertCandidateInput!) {
+    upsertCandidate(input: $input)
+}
