@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-      "test": "jest",
+    "test": "jest",
     "build": "tsc && cpx \"src/playground/**/*.graphql\" dist/playground",
     "start": "node dist/server.js",
     "models-gen": "sequelize-auto -h 127.0.0.1 -d recruitment-mysql -u admin -x recruitment -p 3307 --dialect mysql -o \"./src/db_models/sql\" -l ts && npm run lint:fix-model && npm run prettier:models",
@@ -58,6 +58,7 @@
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@typescript-eslint/parser": "^7.3.1",
     "babel-eslint": "^10.1.0",
+    "cpx": "^1.5.0",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-babel": "^9.0.0",
@@ -71,8 +72,7 @@
     "nodemon": "^3.1.0",
     "prettier": "^3.2.5",
     "ts-jest": "^29.1.2",
-    "typescript": "^5.4.3",
-    "cpx": "^1.5.0"
+    "typescript": "^5.4.3"
   },
   "dependencies": {
     "@apollo/server": "^4.10.2",
@@ -83,7 +83,6 @@
     "codegen": "^0.1.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "express-graphql": "^0.12.0",
     "file-type": "14.7.1",
     "graphql": "^16.8.1",
     "graphql-import-node": "^0.0.5",
