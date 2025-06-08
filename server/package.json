@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc && cpx \"src/playground/**/*.graphql\" dist/playground",
+    "build": "tsc && cpx \"src/**/*.graphql\" dist/",
     "start": "node dist/server.js",
     "models-gen": "sequelize-auto -h 127.0.0.1 -d recruitment-mysql -u admin -x recruitment -p 3307 --dialect mysql -o \"./src/db_models/sql\" -l ts && npm run lint:fix-model && npm run prettier:models",
     "codegen": "graphql-codegen --config codegen.yml && npm run prettier:base -- --write \"src/__generated__/*.ts\"",
