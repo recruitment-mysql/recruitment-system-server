@@ -1,11 +1,23 @@
-FROM node:18.18.0 AS development
+# Base image
+FROM node:18.18.0
 
-WORKDIR /app/
+# App directory
+WORKDIR /app
 
+# Copy package info
 COPY package*.json ./
+
+# Install dependencies
 RUN npm install --legacy-peer-deps
 
-COPY tsconfig.json ./
+# Copy the rest of the app
+COPY . .
 
+# Build TypeScript → dist/
+RUN npm run build
+
+# Expose port your app listens on
 EXPOSE 4000
-CMD npm start
+
+# Start the server (from dist/)
+CMD ["npm", "start"]
