@@ -71,8 +71,8 @@
     "nodemon": "^3.1.0",
     "prettier": "^3.2.5",
     "ts-jest": "^29.1.2",
-    "typescript": "^5.4.3"
-    "cpx": "^1.5.0",
+    "typescript": "^5.4.3",
+    "cpx": "^1.5.0"
   },
   "dependencies": {
     "@apollo/server": "^4.10.2",
