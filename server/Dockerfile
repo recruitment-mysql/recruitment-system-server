@@ -10,6 +10,8 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install --legacy-peer-deps
 
+RUN cp -r src/schema/types/*.graphql dist/schema/types/
+
 # Copy the rest of the app
 COPY . .
 
