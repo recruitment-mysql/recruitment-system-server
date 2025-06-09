@@ -216,7 +216,7 @@ const candidateResolver: IResolvers = {
                     sortedEmployers
                         .filter(e => userMap.has(e.user_id)) // đảm bảo luôn có user
                         .map(async (employer) => {
-                            const formatted = await formatEmployer(employer, { requesterRole: context.user.role });
+                            const formatted = await formatEmployer(employer, { isSelf: false  });
                             return {
                                 user: userMap.get(employer.user_id)!,
                                 employer: formatted
